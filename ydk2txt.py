@@ -23,11 +23,11 @@ for keys in maindecz:
 	cur.execute("SELECT name FROM texts WHERE id=?",ids)
 	temp=cur.fetchone()
 	if temp is not None:
-		f.write(str(temp[0])+" x"+str(maindecz[keys])+"\n")
+		f.write(str(temp[0])+" x "+str(maindecz[keys])+"\n")
 	else:
 		cur2.execute("SELECT name FROM texts WHERE id=?",ids)
 		result=cur2.fetchone()
-		f.write(str(result[0])+" x"+str(maindecz[keys])+"\n")
+		f.write(str(result[0])+" x "+str(maindecz[keys])+"\n")
 f.write("\n")
 f.write("Extra Deck:\n")
 f.write("\n")
@@ -36,11 +36,11 @@ for keys in extradecz:
 	cur.execute("SELECT name FROM texts WHERE id=?",ids)
 	temp=cur.fetchone()
 	if temp is not None:
-		f.write(str(temp[0])+" x"+str(extradecz[keys])+"\n")
+		f.write(str(temp[0])+" x "+str(extradecz[keys])+"\n")
 	else:
 		cur2.execute("SELECT name FROM texts WHERE id=?",ids)
 		result=cur2.fetchone()
-		f.write(str(result[0])+" x"+str(extradecz[keys])+"\n")
+		f.write(str(result[0])+" x "+str(extradecz[keys])+"\n")
 f.write("\n")
 f.write("Side Deck:\n")
 f.write("\n")
@@ -49,9 +49,9 @@ for keys in sidedecz:
 	cur.execute("SELECT name FROM texts WHERE id=?",ids)
 	temp=cur.fetchone()
 	if temp is not None:
-		f.write(str(temp[0])+" x"+str(sidedecz[keys])+"\n")
+		f.write(str(temp[0])+" x "+str(sidedecz[keys])+"\n")
 	else:
 		cur2.execute("SELECT name FROM texts WHERE id=?",ids)
 		result=cur2.fetchone()
-		f.write(str(result[0])+" x"+str(sidedecz[keys])+"\n")
+		f.write(str(result[0])+" x "+str(sidedecz[keys])+"\n")
 f.close()
