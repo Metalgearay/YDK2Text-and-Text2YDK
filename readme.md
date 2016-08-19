@@ -2,7 +2,7 @@ Here are two simple python scripts that handel conversion from a ydk file( used 
 
 Setup:
 
-You need to install at least python 2.7.x( I tried python 3.5.x and it worked but be warned it was created with python version 2.7) from https://www.python.org/downloads/ for your platform
+You need to install at least python 2.7.x( NOTE YOU DO NEED PYTHON 2.7 BECAUSE OF RAW_INPUT WILL PORT AT A LATER POINT) from https://www.python.org/downloads/ for your platform
 
 
 Other than that you are ready to go
