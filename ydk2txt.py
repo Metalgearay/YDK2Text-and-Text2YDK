@@ -41,6 +41,32 @@ def searchForName(database,id):
 	else:
 		("Could not find %s please check if you have update data base" % id,)
 
+def searchForCatagory(database,idx):
+	ids=(idx,)
+	database.execute("SELECT type FROM datas WHERE id=?",ids)
+	result=database.fetchone()
+	if result is not None:
+		return result
+	else:
+		("Could not find %s please check if you have update data base" % id,)
+def isMonster(category):
+	if (category & 1 ) > 0:
+		return True
+	else:
+		return False
+def isSpell(category):
+	if (category & 2 ) > 0:
+		return True
+	else:
+		return False
+def isTrap(category):
+	if (category & 4) > 0:
+		return True
+	else:
+		return False
+
+
+
 def writeToFile(database,string,deck,mainFile,pricerpt,pricefl):
 	mainFile.write("\n%s\n\n" % string)
 	sums=0
@@ -59,7 +85,7 @@ def writeToFile(database,string,deck,mainFile,pricerpt,pricefl):
 			if tup is not None:
 					print_tag=str(tup[0])
 					price=str(tup[1]*deck[key])
-					pricefl.write("%s - %s x %s $%s USD \n" % (name[0],print_tag,deck[key],price))
+					pricefl.write("\n%s - %s x %s $%s USD \n" % (name[0],print_tag,deck[key],price))
 					sums+=float(price)
 			else:
 				pricefl.write("%s - Could not find price\n"% name[0])
@@ -70,6 +96,24 @@ def writeToFile(database,string,deck,mainFile,pricerpt,pricefl):
 			totalsum+=sums
 		except:
 			print ("Error reading file")
+def mainDeckBreakDown(database,maindeck):
+	monsterList={}
+	spellList={}
+	trapList={}
+	unknown={}
+	for key in maindeck:
+		result=searchForCatagory(database,key)[0]
+		if result is not None:
+			if isMonster(result):
+				monsterList[key]=maindeck[key]
+			if isSpell(result):
+				spellList[key]=maindeck[key]
+			if isTrap(result):
+				trapList[key]=maindeck[key]
+			
+		else:
+			unknown[key]=maindeck[key]
+	return (monsterList,spellList,trapList,unknown,)
 
 def main():
 	deckname=sys.argv[1]
@@ -85,9 +129,14 @@ def main():
 	extradeck=decks[1]
 	sidedeck=decks[2]
 	database=openDatabase()
-	writeToFile(database,"Main Deck",maindeck,filetowrite,answer,pricefl)
-	writeToFile(database,"Extra Deck",extradeck,filetowrite,answer,pricefl)
-	writeToFile(database,"Side Deck",sidedeck,filetowrite,answer,pricefl)
+	result=mainDeckBreakDown(database,maindeck)
+	writeToFile(database,"Monsters (%d)" % sum(result[0].values()),result[0],filetowrite,answer,pricefl)
+	writeToFile(database,"Spells (%d)" % sum(result[1].values()),result[1],filetowrite,answer,pricefl)
+	writeToFile(database,"Traps (%d)"% sum(result[2].values()),result[2],filetowrite,answer,pricefl)
+	writeToFile(database,"Extra Deck (%d)" % sum(extradeck.values()),extradeck,filetowrite,answer,pricefl)
+	writeToFile(database,"Side Deck (%d)" % sum(sidedeck.values()),sidedeck,filetowrite,answer,pricefl)
+	if len(result[3]) != 0:
+		writeToFile(database,"Unkown Please Move",result[3],filetowrite,answer,pricefl)
 	filetowrite.close()
 	if answer == 'y':
 		try:
